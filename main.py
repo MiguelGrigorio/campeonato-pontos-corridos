@@ -45,14 +45,11 @@ def completar_rodada(rodada: Rodada, camp: Campeonato):
     resultado = rodada.finalizar_rodada()
     camp.add_rodada(rodada, resultado)
 
-clear = lambda: os.system('cls' if os.name=='nt' else 'clear')
+clear = lambda: os.system('cls' if os.name == 'nt' else 'clear')
 clear()
 gerar_times(alfabetão)
 times = alfabetão.get_times()
 rodadas = gerar_confrontos(times)
-
-# for i in range(38):
-#     completar_rodada(rodadas[i], alfabetão)
 
 numero_rodada = 0
 def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
@@ -71,12 +68,12 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
                 print(f'Técnico: {time.tecnico.nome}\tCarreira: {time.tecnico.carreira}')
                 print('Jogadores:')
                 for jogador in time.jogadores:
-                    print(f'\tNome: {jogador.nome} \t Gols: {jogador.gols} \t Posição: {jogador.posicao}')
+                    print(f'\tNome: {jogador.nome} \t {'Gol' if jogador.gols == 1 else 'Gols'} {jogador.gols} \t Posição: {jogador.posicao}')
             else:
                 raise Exception('Time inválido.')
         case 'Confrontos':
             cft = camp.get_rodadas()
-            cft = cft[n_rodada - 1]
+            cft = cft[n_rodada]
             print(f'Confrontos da Rodada {cft.get_num_rodada()}')
             cft = cft.get_confrontos()
             for confronto in cft:
@@ -87,6 +84,12 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
         case 'Avançar rodada':
             n_rodada += 1
             completar_rodada(rodadas[n_rodada - 1], camp)
+        case 'Goleadores':
+            rds = camp.get_rodadas()
+            rds = rds[n_rodada]
+            print(f'= Goleadores da rodada {rds.get_num_rodada()} =')
+            for k, v in rds.goleadores.items():
+               print(f'{k}\t {v} {'gol' if v == 1 else 'gols'}')
         case 'Artilheiros':
             print('==== Artilheiros ====')
             for k, v in camp.artilheiros.items():
@@ -95,11 +98,11 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
             print('= Tabela =')
             for k, v in camp.classificacao.items():
                 print(f'{k}\t {v}')
-        case 'Visualizar rodada':
-            resp = int(input("Digite o número da rodada que deseja visualizar: "))
+        case 'Confrontos anteriores':
+            resp = int(input("Digite a rodada de confrontos que deseja visualizar: "))
             if resp < 1 or resp > 38:
                 raise Exception('Rodada inválida')
-            user(resp)
+            menu('Confrontos', camp, resp, rodadas)
         case 'Finalizar campeonato':
             for i in range(n_rodada + 1, 38):
                 completar_rodada(rodadas[i], camp)
@@ -115,9 +118,9 @@ def user(n_rodada: int):
     if numero_rodada == 0:
         escolhas = ['Times', 'Avançar rodada', 'Finalizar campeonato']
     elif numero_rodada == 38:
-        escolhas = ['Times', 'Confrontos', 'Artilheiros', 'Classificação', 'Visualizar rodada']
+        escolhas = ['Times', 'Confrontos', 'Goleadores', 'Artilheiros', 'Classificação', 'Confrontos anteriores']
     else:
-        escolhas = ['Times', 'Confrontos', 'Avançar rodada', 'Artilheiros', 'Classificação', 'Finalizar campeonato']
+        escolhas = ['Times', 'Confrontos', 'Avançar rodada', 'Goleadores', 'Artilheiros', 'Classificação', 'Finalizar campeonato']
     
     if n_rodada != numero_rodada:
         escolhas.remove('Times')

@@ -38,7 +38,7 @@ class Confronto:
         self.data = date.today() + (num_rod * timedelta(7))
         self.estádio = self.timeCasa.estádio
 
-        self._goleadores = {}
+        self.goleadores = {}
 
     def finalizar_confronto(self):
         self.gols = (random.randrange(0, 5), random.randrange(0, 5))
@@ -61,16 +61,16 @@ class Confronto:
                 goleador = goleador[0]
                 goleador.add_gol()
                 try:
-                    self._goleadores[goleador.nome] += 1
+                    self.goleadores[goleador.nome] += 1
                 except:
-                    self._goleadores[goleador.nome] = 1
-        return self._goleadores
+                    self.goleadores[goleador.nome] = 1
+        return self.goleadores
 
 class Rodada:
     def __init__(self, n_rodada: int):
         self._confrontos = []
         self._rodada = n_rodada
-        self._goleadores = {} # ? (Não está sendo usado)
+        self.goleadores = {}
 
     def add_confronto(self, cft: Confronto):
         self._confrontos.append(cft)
@@ -85,7 +85,7 @@ class Rodada:
         pts_totais = {}
         for i in range(10):
             cft = self._confrontos[i]
-            self._goleadores = cft.finalizar_confronto()
+            self.goleadores.update(cft.finalizar_confronto())
 
             if cft.resultado == "Empate":
                 pts_totais[cft.timeCasa] = 1
