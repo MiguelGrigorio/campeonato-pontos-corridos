@@ -26,7 +26,7 @@ def gerar_confrontos(times: list):
     for n_rodada in range(1, 39):
         rodada = Rodada(n_rodada)
         for i in range(10):
-            if n_rodada < 19:
+            if n_rodada < 20:
                 casa = times[i]
                 fora = times[-i - 1]
             else:
@@ -75,11 +75,11 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
             cft = camp.get_rodadas()
             for c in cft:
                 if c.get_num_rodada() == n_rodada:
-                    cft = c
+                    conf = c
                     break
-            print(f'Confrontos da Rodada {cft.get_num_rodada()}')
-            cft = cft.get_confrontos()
-            for confronto in cft:
+            print(f'Confrontos da Rodada {conf.get_num_rodada()}')
+            conf = conf.get_confrontos()
+            for confronto in conf:
                 print(f'{confronto.timeCasa.nome} ({confronto.gols[0]}) x {confronto.timeFora.nome} ({confronto.gols[1]})')
                 print(f'\tData: {confronto.data}')
                 print(f'\tEstádio: {confronto.estádio}')
@@ -95,10 +95,10 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
             rds = camp.get_rodadas()
             for r in rds:
                 if r.get_num_rodada() == n_rodada:
-                    rds = r
+                    rods = r
                     break
-            print(f'= Goleadores da rodada {rds.get_num_rodada()} =')
-            for k, v in rds.goleadores.items():
+            print(f'= Goleadores da rodada {rods.get_num_rodada()} =')
+            for k, v in rods.goleadores.items():
                print(f'{k}\t {v} {'gol' if v == 1 else 'gols'}\n')
         case 'Artilheiros':
             print('==== Artilheiros ====')
@@ -145,7 +145,7 @@ def user(n_rodada: int):
     if resposta >= len(escolhas):
         raise Exception('Escolha Inválida')
     else:
-        clear()
+        #clear()
         return menu(escolhas[resposta], alfabetão, n_rodada, rodadas)
 #endregion
 #endregion
