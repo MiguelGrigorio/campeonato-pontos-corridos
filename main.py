@@ -40,7 +40,7 @@ def gerar_confrontos(times: list):
     return rodadas
 
 #endregion
-
+#region Menu
 def completar_rodada(rodada: Rodada, camp: Campeonato):
     resultado = rodada.finalizar_rodada()
     camp.add_rodada(rodada, resultado)
@@ -73,7 +73,10 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
                 raise Exception('Time inválido.')
         case 'Confrontos':
             cft = camp.get_rodadas()
-            cft = cft[n_rodada]
+            for c in cft:
+                if c.get_num_rodada() == n_rodada:
+                    cft = c
+                    break
             print(f'Confrontos da Rodada {cft.get_num_rodada()}')
             cft = cft.get_confrontos()
             for confronto in cft:
@@ -83,17 +86,24 @@ def menu(resposta: str, camp: Campeonato, n_rodada: int, rodadas: list):
                 print(f'\tGanhador: {confronto.resultado.nome if type(confronto.resultado) == Time else confronto.resultado}\n')
         case 'Avançar rodada':
             n_rodada += 1
-            completar_rodada(rodadas[n_rodada - 1], camp)
-        case 'Goleadores':
+            for r in rodadas:
+                if r.get_num_rodada() == n_rodada:
+                    rodada = r
+                    break
+            completar_rodada(rodada, camp)
+        case 'Goleadores da rodada':
             rds = camp.get_rodadas()
-            rds = rds[n_rodada]
+            for r in rds:
+                if r.get_num_rodada() == n_rodada:
+                    rds = r
+                    break
             print(f'= Goleadores da rodada {rds.get_num_rodada()} =')
             for k, v in rds.goleadores.items():
-               print(f'{k}\t {v} {'gol' if v == 1 else 'gols'}')
+               print(f'{k}\t {v} {'gol' if v == 1 else 'gols'}\n')
         case 'Artilheiros':
             print('==== Artilheiros ====')
             for k, v in camp.artilheiros.items():
-                print(f'{k}\t{v} {'gol' if v == 1 else 'gols'}')
+                print(f'{k}\t{v} {'gol' if v == 1 else 'gols'}\n')
         case 'Classificação':
             print('= Tabela =')
             for k, v in camp.classificacao.items():
@@ -118,9 +128,9 @@ def user(n_rodada: int):
     if numero_rodada == 0:
         escolhas = ['Times', 'Avançar rodada', 'Finalizar campeonato']
     elif numero_rodada == 38:
-        escolhas = ['Times', 'Confrontos', 'Goleadores', 'Artilheiros', 'Classificação', 'Confrontos anteriores']
+        escolhas = ['Times', 'Confrontos', 'Goleadores da rodada', 'Artilheiros', 'Classificação', 'Confrontos anteriores']
     else:
-        escolhas = ['Times', 'Confrontos', 'Avançar rodada', 'Goleadores', 'Artilheiros', 'Classificação', 'Finalizar campeonato']
+        escolhas = ['Times', 'Confrontos', 'Avançar rodada', 'Goleadores da rodada', 'Artilheiros', 'Classificação', 'Finalizar campeonato']
     
     if n_rodada != numero_rodada:
         escolhas.remove('Times')
@@ -137,7 +147,7 @@ def user(n_rodada: int):
     else:
         clear()
         return menu(escolhas[resposta], alfabetão, n_rodada, rodadas)
-
+#endregion
 #endregion
 
 while True:
