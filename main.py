@@ -145,7 +145,7 @@ def user(n_rodada: int):
     if resposta >= len(escolhas):
         raise Exception('Escolha Inválida')
     else:
-        #clear()
+        clear()
         return menu(escolhas[resposta], alfabetão, n_rodada, rodadas)
 #endregion
 #endregion
